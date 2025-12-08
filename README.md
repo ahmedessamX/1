@@ -8,6 +8,7 @@ See [ACCOUNT_MERGE_GUIDE.md](ACCOUNT_MERGE_GUIDE.md) for a comprehensive guide o
 
 - Transferring repositories between accounts
 - Managing multiple email addresses in one account
+- Managing GitHub Copilot and other subscriptions
 - Migrating your GitHub activity
 - Step-by-step consolidation process
 - Important considerations and limitations

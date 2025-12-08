@@ -44,7 +44,30 @@ While you can't merge accounts directly, you can:
 - **Update email associations** for commits
 - **Archive or delete** the secondary account when done
 
-### 4. Configure Git to Use Your Primary Account
+### 4. Manage GitHub Copilot Subscription
+
+If you have a GitHub Copilot Pro subscription on one account and want to move it to another:
+
+**Cancel and Re-subscribe Method**:
+1. Cancel your Copilot Pro subscription on the old account:
+   - Go to GitHub Settings → Billing and plans → Plans and usage
+   - Find GitHub Copilot and click **Edit** → **Cancel plan**
+2. Wait for the billing cycle to end (or it will cancel immediately depending on timing)
+3. Subscribe to Copilot Pro on your primary account:
+   - Go to your primary account's Settings → Copilot
+   - Click **Enable GitHub Copilot** and choose the Pro plan
+
+**Important Notes**:
+- GitHub Copilot subscriptions cannot be transferred directly between accounts
+- You'll need to cancel on one account and create a new subscription on another
+- If you cancel mid-cycle, you typically retain access until the end of your billing period
+- Consider timing the cancellation near your billing cycle end to maximize your paid period
+
+**Contact Support for Special Cases**:
+- If you need help with billing or subscription issues, contact GitHub Support
+- They may be able to assist with special circumstances
+
+### 5. Configure Git to Use Your Primary Account
 
 Update your local Git configuration to use your primary account:
 
@@ -66,12 +89,14 @@ git config user.name "Your Name"
 - ✅ Stars (manually re-star repositories)
 - ✅ Gists (copy/paste to new gists)
 - ✅ SSH keys (add to primary account)
+- ⚠️ GitHub Copilot subscription (requires cancel and re-subscribe)
 
 ### What Cannot Be Migrated
 - ❌ Contribution history (commits remain tied to the email used)
 - ❌ Issue/PR comments (remain under the original account)
 - ❌ Organizations you've created (must transfer separately)
 - ❌ Discussions and comments
+- ❌ Subscription history and billing records
 
 ## Step-by-Step Process
 
@@ -84,12 +109,18 @@ git config user.name "Your Name"
 2. Update any webhooks or integrations
 3. Update CI/CD configurations if needed
 
-### Step 3: Update Local Git Configuration
+### Step 3: Manage Subscriptions (if applicable)
+1. Note your current subscription renewal date
+2. Cancel GitHub Copilot Pro (or other subscriptions) on the old account
+3. Wait for the current billing period to end (retain access until then)
+4. Subscribe to GitHub Copilot Pro on your primary account
+
+### Step 4: Update Local Git Configuration
 ```bash
 git config --global user.email "primary-email@example.com"
 ```
 
-### Step 4: Clean Up
+### Step 5: Clean Up
 1. Remove sensitive data from the secondary account
 2. Consider deleting or archiving the secondary account
 3. Update any external services pointing to the old account
