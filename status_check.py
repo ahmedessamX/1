@@ -2,6 +2,10 @@
 """
 Simple status check script to verify the system is operational.
 """
+import os
+import subprocess
+import sys
+
 
 def check_system_status():
     """
@@ -10,14 +14,36 @@ def check_system_status():
     Returns:
         dict: System status information
     """
+    components = {}
+    all_operational = True
+    
+    # Check if we're in a git repository
+    try:
+        result = subprocess.run(['git', 'rev-parse', '--git-dir'], 
+                              capture_output=True, text=True, check=True)
+        components['repository'] = 'active'
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        components['repository'] = 'error'
+        all_operational = False
+    
+    # Check if Python is working (if we got here, it is!)
+    components['python_runtime'] = 'functional'
+    
+    # Check if we can read/write files
+    try:
+        test_file = '.status_test'
+        with open(test_file, 'w') as f:
+            f.write('test')
+        os.remove(test_file)
+        components['file_operations'] = 'operational'
+    except (IOError, OSError):
+        components['file_operations'] = 'error'
+        all_operational = False
+    
     status = {
-        'operational': True,
-        'message': 'System is working correctly',
-        'components': {
-            'repository': 'active',
-            'copilot_agent': 'functional',
-            'git_operations': 'operational'
-        }
+        'operational': all_operational,
+        'message': 'System is working correctly' if all_operational else 'Some components have errors',
+        'components': components
     }
     return status
 
