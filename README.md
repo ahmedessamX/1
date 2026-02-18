@@ -15,7 +15,6 @@ python3 status_check.py
 ## What This Verifies
 
 - Repository is accessible and functional
-- Copilot agent is working correctly
 - Git operations are operational
 - File system read/write operations are working
 

@@ -5,6 +5,7 @@ Simple status check script to verify the system is operational.
 import os
 import subprocess
 import sys
+import tempfile
 
 
 def check_system_status():
@@ -31,10 +32,9 @@ def check_system_status():
     
     # Check if we can read/write files
     try:
-        test_file = '.status_test'
-        with open(test_file, 'w') as f:
+        with tempfile.NamedTemporaryFile(mode='w', delete=True) as f:
             f.write('test')
-        os.remove(test_file)
+            f.flush()
         components['file_operations'] = 'operational'
     except (IOError, OSError):
         components['file_operations'] = 'error'
@@ -66,4 +66,4 @@ def main():
 
 
 if __name__ == '__main__':
-    exit(main())
+    sys.exit(main())
