@@ -20,7 +20,7 @@ This repository has been configured with the Codacy MCP (Model Context Protocol)
 
 The MCP server is configured in `.cursor/mcp.json`. To use it:
 
-1. Replace `<YOUR_CODACY_TOKEN>` with your actual Codacy API token in `.cursor/mcp.json`:
+1. Replace `YOUR_CODACY_TOKEN_HERE` with your actual Codacy API token in `.cursor/mcp.json`:
    ```json
    {
      "mcpServers": {

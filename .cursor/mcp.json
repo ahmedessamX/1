@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "@codacy/codacy-mcp"],
       "env": {
-        "CODACY_ACCOUNT_TOKEN": "<YOUR_CODACY_TOKEN>"
+        "CODACY_ACCOUNT_TOKEN": "YOUR_CODACY_TOKEN_HERE"
       }
     }
   }
