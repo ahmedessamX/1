@@ -1,0 +1,14 @@
+# Secrets — never commit
+docker/ai-dev/.env
+
+# Generated backup/analysis output (run scripts locally; don't commit results)
+SystemAnalysis/
+SystemBackup/
+
+# OS artifacts
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/settings.json
+*.swp

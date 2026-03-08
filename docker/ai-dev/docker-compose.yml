@@ -1,0 +1,93 @@
+services:
+  # ─────────────────────────────────────────────────────────────────
+  # AI Development Container
+  # ─────────────────────────────────────────────────────────────────
+  ai-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CUDA_VERSION: "12.4.1"
+        CUDNN_VERSION: "9"
+        UBUNTU_VERSION: "22.04"
+    image: ai-dev:latest
+    container_name: ai-dev
+    restart: unless-stopped
+
+    # GPU passthrough — requires NVIDIA Container Toolkit
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    # Load environment variables from .env file (copy .env.example → .env)
+    env_file:
+      - .env
+
+    ports:
+      - "8888:8888"   # JupyterLab
+      - "6006:6006"   # TensorBoard
+      - "7860:7860"   # Gradio
+      - "8000:8000"   # FastAPI / general
+
+    volumes:
+      # Project workspace — map your actual projects folder here
+      - ${WORKSPACE_DIR:-../../}:/workspace
+      # Persist HuggingFace model cache between container rebuilds
+      - hf_cache:/workspace/.cache/huggingface
+      # Persist pip / conda caches for faster rebuilds
+      - pip_cache:/root/.cache/pip
+      - conda_pkgs:/opt/conda/pkgs
+
+    shm_size: '8gb'   # Increase shared memory for large batch sizes
+
+    stdin_open: true
+    tty: true
+
+  # ─────────────────────────────────────────────────────────────────
+  # TensorBoard (optional — comment out if not needed)
+  # ─────────────────────────────────────────────────────────────────
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: tensorboard
+    restart: unless-stopped
+    command: tensorboard --logdir=/runs --host=0.0.0.0 --port=6007
+    ports:
+      - "6007:6007"
+    volumes:
+      - tb_runs:/runs
+    profiles:
+      - monitoring   # only start with: docker compose --profile monitoring up
+
+  # ─────────────────────────────────────────────────────────────────
+  # PostgreSQL — shared database for experiments / results
+  # ─────────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: ai-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aidev}
+      POSTGRES_USER: ${POSTGRES_USER:-aidev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    profiles:
+      - db   # only start with: docker compose --profile db up
+
+# ─────────────────────────────────────────────────────────────────
+# Named volumes (data persists between container restarts)
+# ─────────────────────────────────────────────────────────────────
+volumes:
+  hf_cache:
+  pip_cache:
+  conda_pkgs:
+  tb_runs:
+  pg_data:
